@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+script_dir=$(cd $(dirname "${BASH_SOURCE[0]}")&& pwd)
+dry="0"
+while [[ $# -gt 0 ]];do
+    if [[ $1 == "--dry" ]];then
+        dry="1"
+    fi
+
+    shift
+done
+
+log(){
+    if [[ $dry == "1"  ]]; then
+     echo "[DRY_RUN]: $@"
+    else
+        echo "$@"
+    fi
+
+}
+
+execute(){
+    if [[ $dry == "1" ]] ; then
+        log "[DRY_RUN] executing $@"
+        return
+    else
+
+        log "executeing $@"
+    fi
+    "$@"
+}
+
+
+log "_______________dev__________"
+## copy the dir content to a give dir src/dir=>dest/dir
+copy_dir(){
+    from=$1
+    to=$2
+
+    pushd $from > /dev/null
+
+    dirs=$(find . -mindepth 1 -maxdepth 1 -type d)
+    for dir in $dirs;do
+        execute rm -rf $to/$dir
+        execute cp -r  $dir $to/$dir
+
+    done
+
+    popd > /dev/null
+
+
+}   
+
+## copy the file to the given dir file=>dir/file 
+copy(){
+    from=$1
+    to=$2
+    fileName=$(basename $from)
+    
+
+    execute rm $to/$fileName
+    execute cp $from $to/$fileName
+}    
+copy_dir .config $XDG_CONFIG_HOME
+copy .testConfig $HOME

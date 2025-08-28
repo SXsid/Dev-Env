@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+#  Detect latest Go version
+GO_VERSION=$(curl -s https://go.dev/dl/?mode=json | jq -r '.[0].version' | sed 's/go//')
+echo "Latest Go version detected: $GO_VERSION"
+
+#  Define install directory and profile
+INSTALL_DIR="$HOME/.local/go"
+PROFILE_FILE="$HOME/.bashrc"   # change to ~/.zshrc if using zsh
+GOBIN="$HOME/go/bin"
+
+#  Remove old Go installation (safe)
+if [ -d "$INSTALL_DIR" ]; then
+    echo "Removing existing Go installation..."
+    rm -rf "$INSTALL_DIR"
+fi
+
+#  Download and extract Go
+ARCH=$(uname -m)
+case "$ARCH" in
+  x86_64) ARCH="amd64" ;;
+  aarch64) ARCH="arm64" ;;
+  *) echo "Unsupported architecture: $ARCH"; exit 1 ;;
+esac
+
+echo "Downloading Go $GO_VERSION for $ARCH..."
+curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-${ARCH}.tar.gz" -o /tmp/go.tar.gz
+
+mkdir -p "$INSTALL_DIR"
+tar -C "$INSTALL_DIR" --strip-components=1 -xzf /tmp/go.tar.gz
+rm /tmp/go.tar.gz
+
+#  Add GOBIN to PATH if not already present (current session)
+if [[ ":$PATH:" != *":$GOBIN:"* ]]; then
+    export PATH="$GOBIN:$INSTALL_DIR/bin:$PATH"
+fi
+
+#  Persist PATH in bashrc if not already there
+if ! grep -q "$GOBIN" "$PROFILE_FILE"; then
+    echo "" >> "$PROFILE_FILE"
+    echo "# Added by Go installer script" >> "$PROFILE_FILE"
+    echo "export GOBIN=\"$GOBIN\"" >> "$PROFILE_FILE"
+    echo "export PATH=\"\$GOBIN:$INSTALL_DIR/bin:\$PATH\"" >> "$PROFILE_FILE"
+fi
+
+#  Test Go installation
+if command -v go >/dev/null 2>&1; then
+    echo " Go installed successfully: $(go version)"
+else
+    echo " Go installation failed."
+    exit 1
+fi
+
