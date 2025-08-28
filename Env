@@ -61,4 +61,3 @@ copy(){
     execute cp $from $to/$fileName
 }    
 copy_dir .config $XDG_CONFIG_HOME
-copy .testConfig $HOME
