@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 script_dir=$(cd $(dirname "${BASH_SOURCE[0]}")&& pwd)
 dry="0"
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 while [[ $# -gt 0 ]];do
     if [[ $1 == "--dry" ]];then
         dry="1"
@@ -60,4 +61,19 @@ copy(){
     execute rm $to/$fileName
     execute cp $from $to/$fileName
 }    
-copy_dir .config $XDG_CONFIG_HOME
+ensure_bashrc_hook() {
+    hook='[ -f "$HOME/.bashrc_ext" ] && source "$HOME/.bashrc_ext"'
+    if ! grep -qxF "$hook" "$HOME/.bashrc"; then
+        echo "$hook" >> "$HOME/.bashrc"
+        log "Added hook to .bashrc"
+    else
+        log "Hook already exists in .bashrc"
+    fi
+}
+
+#copy_dir .config $XDG_CONFIG_HOME
+#copy Configs/.bash_profile $HOME
+#copy .local/scripts/tmux_sessionizer "$HOME/.local/scripts"
+copy Configs/.bashrc_ext $HOME
+ensure_bashrc_hook
+

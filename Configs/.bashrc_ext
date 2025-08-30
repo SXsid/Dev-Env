@@ -1,0 +1,4 @@
+alias ts="~/.local/scripts/tmux_sessionizer"
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+
