@@ -71,9 +71,9 @@ ensure_bashrc_hook() {
     fi
 }
 
-#copy_dir .config $XDG_CONFIG_HOME
+copy_dir .config $XDG_CONFIG_HOME
 #copy Configs/.bash_profile $HOME
 #copy .local/scripts/tmux_sessionizer "$HOME/.local/scripts"
-copy Configs/.bashrc_ext $HOME
-ensure_bashrc_hook
+#copy Configs/.bashrc_ext $HOME
+#ensure_bashrc_hook
 
