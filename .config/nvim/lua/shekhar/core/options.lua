@@ -1,7 +1,10 @@
 vim.cmd("let g:netrw_liststyle=3")
+vim.opt.splitright = false
 
 
 local opt = vim.opt
+--show mode
+opt.showmode = false
 --file numbers
 opt.relativenumber = true
 opt.number = true
@@ -35,3 +38,8 @@ opt.backspace= "indent,eol,start"
 --clipboard
 
 opt.clipboard:append("unnamedplus")
+
+--split windows
+
+opt.splitright=true
+opt.splitbelow=true
