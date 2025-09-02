@@ -2,9 +2,6 @@ return {
   "nvim-treesitter/nvim-treesitter",
   event = { "BufReadPre", "BufNewFile" },
   build = ":TSUpdate",
-  dependencies = {
-    "windwp/nvim-ts-autotag", -- Add this dependency
-  },
   config = function()
     -- import nvim-treesitter plugin
     local treesitter = require("nvim-treesitter.configs")
@@ -48,10 +45,6 @@ return {
           scope_incremental = false,
           node_decremental = "<bs>",
         },
-      },
-      -- Move autotag here - inside treesitter.setup()
-      autotag = {
-        enable = true,
       },
     })
     -- use bash parser for zsh files

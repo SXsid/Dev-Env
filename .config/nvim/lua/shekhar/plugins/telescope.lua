@@ -40,6 +40,12 @@ return {
     })
     
     telescope.load_extension("fzf")
+
+    -- Load todo-comments extension
+    local todo_ok, _ = pcall(require, "todo-comments")
+    if todo_ok then
+      telescope.load_extension("todo-comments")
+    end
     
     -- set keymaps
     local keymap = vim.keymap -- for conciseness

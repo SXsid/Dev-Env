@@ -5,6 +5,9 @@ vim.opt.splitright = false
 local opt = vim.opt
 --show mode
 opt.showmode = false
+opt.cmdheight = 1
+opt.laststatus = 3  
+opt.signcolumn = "auto"
 --file numbers
 opt.relativenumber = true
 opt.number = true
