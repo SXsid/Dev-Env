@@ -1,0 +1,134 @@
+# Fixed Tmux Configuration with Catppuccin Theme
+# Place this file at: ~/.config/tmux/tmux.conf
+
+# ====================
+# BASIC SETTINGS
+# ====================
+set-option -g default-terminal 'tmux-256color'
+set-option -g terminal-overrides ',xterm-256color:RGB'
+set -g prefix C-a
+unbind C-b
+bind-key C-a send-prefix
+
+set -g base-index 1              # start indexing windows at 1 instead of 0
+set -g pane-base-index 1         # start indexing panes at 1
+set -g detach-on-destroy off     # don't exit from tmux when closing a session
+set -g escape-time 0             # zero-out escape time delay
+set -g history-limit 1000000     # increase history size (from 2,000)
+set -g renumber-windows on       # renumber all windows when any window is closed
+set -g set-clipboard on          # use system clipboard
+set -g status-position bottom    # CHANGED: status bar at bottom
+set -g mouse on                  # enable mouse support
+setw -g mode-keys vi
+
+# ====================
+# KEY BINDINGS
+# ====================
+# Reload config
+bind r source-file ~/.config/tmux/tmux.conf \; display-message "Config reloaded"
+
+# Better window splits
+bind | split-window -h -c "#{pane_current_path}"
+bind - split-window -v -c "#{pane_current_path}"
+bind c new-window -c "#{pane_current_path}"
+
+# Pane navigation
+bind -r h select-pane -L
+bind -r j select-pane -D
+bind -r k select-pane -U
+bind -r l select-pane -R
+
+# Pane resizing
+bind -r H resize-pane -L 5
+bind -r J resize-pane -D 5
+bind -r K resize-pane -U 5
+bind -r L resize-pane -R 5
+
+# Copy mode bindings
+bind -T copy-mode-vi v send-keys -X begin-selection
+bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel 'xclip -in -selection clipboard'
+
+# ====================
+# PANE STYLING
+# ====================
+set -g pane-active-border-style 'fg=magenta,bg=default'
+set -g pane-border-style 'fg=brightblack,bg=default'
+
+# ====================
+# PLUGINS
+# ====================
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'tmux-plugins/tmux-yank'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+set -g @plugin 'fcsonline/tmux-thumbs'
+set -g @plugin 'sainnhe/tmux-fzf'
+set -g @plugin 'wfxr/tmux-fzf-url'
+
+# CATPPUCCIN THEME - Use official repo
+set -g @plugin 'catppuccin/tmux'
+
+# Optional advanced plugins (comment out if you don't need them)
+# set -g @plugin 'omerxx/tmux-sessionx'
+# set -g @plugin 'omerxx/tmux-floax'
+
+# ====================
+# PLUGIN CONFIGURATIONS
+# ====================
+
+# FZF URL plugin
+set -g @fzf-url-fzf-options '-p 60%,30% --prompt="   " --border-label=" Open URL "'
+set -g @fzf-url-history-limit '2000'
+
+# Resurrect and Continuum
+set -g @continuum-restore 'on'
+set -g @resurrect-strategy-nvim 'session'
+
+# SessionX (uncomment if you want to use it)
+# set -g @sessionx-bind-zo-new-window 'ctrl-y'
+# set -g @sessionx-auto-accept 'off'
+# set -g @sessionx-bind 'o'
+# set -g @sessionx-window-height '85%'
+# set -g @sessionx-window-width '75%'
+# set -g @sessionx-zoxide-mode 'on'
+# set -g @sessionx-filter-current 'false'
+
+# Floax (uncomment if you want to use it)
+# set -g @floax-width '80%'
+# set -g @floax-height '80%'
+# set -g @floax-border-color 'magenta'
+# set -g @floax-text-color 'blue'
+# set -g @floax-bind 'p'
+# set -g @floax-change-path 'true'
+
+# ====================
+# CATPPUCCIN THEME CONFIGURATION
+# ====================
+set -g @catppuccin_flavour 'mocha' # latte, frappe, macchiato, mocha
+
+# Window configuration
+set -g @catppuccin_window_left_separator ""
+set -g @catppuccin_window_right_separator " "
+set -g @catppuccin_window_middle_separator " █"
+set -g @catppuccin_window_number_position "right"
+set -g @catppuccin_window_default_fill "number"
+set -g @catppuccin_window_default_text "#W"
+set -g @catppuccin_window_current_fill "number"
+set -g @catppuccin_window_current_text "#W#{?window_zoomed_flag,(),}"
+
+# Status bar configuration
+set -g @catppuccin_status_modules_right "directory date_time"
+set -g @catppuccin_status_modules_left "session"
+set -g @catppuccin_status_left_separator  " "
+set -g @catppuccin_status_right_separator " "
+set -g @catppuccin_status_right_separator_inverse "no"
+set -g @catppuccin_status_fill "icon"
+set -g @catppuccin_status_connect_separator "no"
+
+# Custom text
+set -g @catppuccin_directory_text "#{b:pane_current_path}"
+set -g @catppuccin_date_time_text "%H:%M"
+
+# Initialize TMUX plugin manager (keep this line at the very bottom)
+run '~/.tmux/plugins/tpm/tpm'
