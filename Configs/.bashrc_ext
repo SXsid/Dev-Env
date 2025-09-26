@@ -1,4 +1,6 @@
 alias ts="~/.local/scripts/tmux_sessionizer"
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
+# Add Mason binaries to PATH
+export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
 

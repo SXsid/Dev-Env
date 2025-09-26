@@ -48,7 +48,7 @@ return {
 		})
 
 		-- Manual format keymap
-		vim.keymap.set({ "n", "v" }, "<leader>mp", function()
+		vim.keymap.set({ "n", "v" }, "<leader>if", function()
 			conform.format({
 				lsp_fallback = true,
 				async = false,

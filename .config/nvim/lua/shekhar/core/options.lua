@@ -1,48 +1,46 @@
 vim.cmd("let g:netrw_liststyle=3")
-vim.opt.splitright = false
-
 
 local opt = vim.opt
---show mode
+
+-- Show mode
 opt.showmode = false
 opt.cmdheight = 1
-opt.laststatus = 3  
+opt.laststatus = 3
 opt.signcolumn = "auto"
---file numbers
+
+-- File numbers
 opt.relativenumber = true
 opt.number = true
+opt.scrolloff = 15
 
---tabs & indentation
+-- Tabs & indentation - Force consistent 4-space indentation
+opt.tabstop = 4 -- Visual width of tab character
+opt.softtabstop = 4 -- Number of spaces tab counts for while editing
+opt.shiftwidth = 4 -- Size of an indent
+opt.expandtab = true -- Convert tabs to spaces
+opt.autoindent = true -- Copy indent from current line when starting new line
+opt.smartindent = true -- Smart autoindenting when starting new line
 
-opt.tabstop =2 -- it will give 2 spaces when pressed
-opt.shiftwidth = 2 -- tab to get indent
-opt.autoindent = true --consistent indetn accros inside
-opt.expandtab = true -- conver tab command to spacs
+-- Override filetype indentation
+vim.cmd([[
+  autocmd FileType * setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
+]])
 
+-- Search settings
+opt.ignorecase = true
+opt.smartcase = true
 opt.wrap = false
 
-
---search setting
-
-opt.ignorecase=true
-opt.smartcase=true 
-
---colorscheme
-
-
+-- Colorscheme
 opt.termguicolors = true
 opt.background = "dark"
 
+-- Backspace
+opt.backspace = "indent,eol,start"
 
---backspace
-
-opt.backspace= "indent,eol,start"
-
---clipboard
-
+-- Clipboard
 opt.clipboard:append("unnamedplus")
 
---split windows
-
-opt.splitright=true
-opt.splitbelow=true
+-- Split windows
+opt.splitright = true
+opt.splitbelow = true
